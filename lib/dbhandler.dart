@@ -49,6 +49,11 @@ class dbHandler{
             "dateExit TEXT,"
             "isDelivered BOOLEAN NOT NULL); "
     );
+    batch.execute("CREATE TABLE IF NOT EXISTS repair("
+        "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "equipment TEXT NOT NULL,"
+        "repair TEXT NOT NULL);"
+    );
     batch.execute("CREATE VIEW v_equipment "
         "AS SELECT cli.id as client_id, "
                     "cli.name as name, "

@@ -8,6 +8,49 @@
 // Foto(s) do aparelho
 import 'dbhandler.dart';
 
+class Repair{
+  int id;
+  final String equipment, repair;
+  Repair(this.equipment,this.repair);
+
+  final dbHandler dbh = dbHandler.instance;
+
+  Map<String,dynamic> toJson() =>{
+    'equipment': equipment,
+    'repair': repair
+  };
+
+  Repair.fromJson(Map<String, dynamic> jsona)
+  :
+      equipment = jsona['equipment'],
+      repair = jsona['repair'];
+
+  int SaveToDB() {
+    Future<int> t = dbh.insert(this.toJson(), "repair");
+    t.then((int value) {
+      this.id = value;
+      return 0;
+    }, onError: (value) {
+      return 1;
+    });
+  }
+
+  Future<Equipment> LoadFromDB(int num) async {
+    dbh.queryByID("repair", num).then((List<Map<String, dynamic>> value){
+      return Equipment.fromJson(value[0]);
+    }
+    );
+  }
+
+  Future UpdateDB(int num) async {
+    return await dbh.update(this.toJson(), num, "repair");
+  }
+
+  Future RemoveDB(int num) async {
+    return await dbh.delete(num, "repair");
+  }
+}
+
 class Equipment {
   int id;
   final int client_id;
