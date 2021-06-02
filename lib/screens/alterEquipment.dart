@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:esms_project/dbhandler.dart';
 import 'package:esms_project/electronic.dart';
 import 'package:esms_project/screens/equipmentDetail.dart';
 import 'package:esms_project/widgets/widget_button.dart';
@@ -17,9 +18,14 @@ class alterEquipment extends StatefulWidget {
 
 class _alterEquipmentState extends State<alterEquipment> {
   final values = new List<TextEditingController>.generate(
-      5, (_) => TextEditingController());
+      6, (_) => TextEditingController());
   final _formEq = GlobalKey<FormState>();
+  final _formRep = GlobalKey<FormState>();
   File _image;
+  List<Map<String, dynamic>> r_list;
+  Repair r;
+  bool _writeRepair = false;
+  bool _srchRepair = false;
   List<String> imagens = [];
   @override
   void initState() {
@@ -95,9 +101,51 @@ class _alterEquipmentState extends State<alterEquipment> {
                         "Data de Saída",
                         "Ex. " +
                             DateFormat.yMd().format(DateTime.now().add(Duration(days:30))),
-                        controller: values[4],)
+                        controller: values[4],),
                     ],
-                  )),
+                  )
+              ),
+              Divider(
+                color: Colors.transparent,
+              ),
+              RichText(
+                text: TextSpan(
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontStyle: FontStyle.normal,
+                      fontWeight: FontWeight.w600),
+                  text: "Deseja registrar o reparo?",
+                ),
+                textAlign: TextAlign.center,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Row(
+                    children: [
+                      Radio(
+                        groupValue: _writeRepair,
+                        value: true,
+                        onChanged: _onChangeRepair,
+                      ),
+                      Text("Sim", style: TextStyle(fontSize: 18)),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Radio(
+                        groupValue: _writeRepair,
+                        value: false,
+                        onChanged: _onChangeRepair,
+                      ),
+                      Text("Não", style: TextStyle(fontSize: 18)),
+                    ],
+                  ),
+                ],
+              ),
+              _AskRepair(),
+              _Repair(),
               Divider(
                 color: Colors.transparent,
               ),
@@ -122,6 +170,102 @@ class _alterEquipmentState extends State<alterEquipment> {
     return _formEq.currentState.validate() && widget.e != null;
   }
 
+  bool _ValidateRepair()
+  {
+    setState(() {});
+    return _formRep.currentState.validate();
+  }
+
+  _AskRepair()
+  {
+    return _writeRepair ? Column(children: [
+      RichText(
+        text: TextSpan(
+          style: TextStyle(
+              color: Colors.black,
+              fontSize: 20,
+              fontStyle: FontStyle.normal,
+              fontWeight: FontWeight.w400),
+          text: "Deseja pesquisar reparos existentes?",
+        ),
+        textAlign: TextAlign.center,
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Row(
+            children: [
+              Radio(
+                groupValue: _srchRepair,
+                value: true,
+                onChanged: _onCheckRepair,
+              ),
+              Text("Sim", style: TextStyle(fontSize: 18)),
+            ],
+          ),
+          Row(
+            children: [
+              Radio(
+                groupValue: _srchRepair,
+                value: false,
+                onChanged: _onCheckRepair,
+              ),
+              Text("Não", style: TextStyle(fontSize: 18)),
+            ],
+          ),
+        ],
+      )
+    ],): Container();
+  }
+
+  _Repair()
+  {
+    return !_srchRepair && _writeRepair ? Container(child:
+      Form(
+        key: _formRep,
+        child: Column(
+          children: [
+            InputValidado("Reparo realizado", "Troca de peça X, Y, Z", controller: values[5],)
+          ],
+        ),
+      ),): _writeRepair ? Container(
+      child: Column(
+          children: [
+            Botoes("Pesquisar Relacionados", onPressed: _srchRep,),
+            if(r_list != null)
+              for (int i = 0; i < r_list.length; i++)
+                Column(
+                  children: [
+                    Divider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(children: [
+                          Icon(Icons.account_circle_rounded),
+                          Text(
+                            " Reparo: " + r_list[i]['repair'].toString(),
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                        ]),
+                        Botoes("Selecionar", onPressed: () => setState(() { }))
+                      ],
+                    ),
+                    ]
+                ),
+          ],
+        ),
+    ): Container();
+  }
+  _onChangeRepair(bool value)
+  {
+    setState(() {
+      _writeRepair = value;
+    });
+  }
   Future<void> _snapPic() async {
     if (_ValidateInputs()) {
       final imageCarregada =
@@ -165,16 +309,37 @@ class _alterEquipmentState extends State<alterEquipment> {
                 values[2].text,
                 DateFormat.yMd().parse(values[3].text),
             );
-
             if(values[4].text.isNotEmpty)
               widget.e.EquipmentLeave(
                   DateFormat.yMd().parse(values[4].text)
               );
+            if(_ValidateRepair())
+              {
+                Repair r = new Repair(tmp,values[5].text);
+                r.SaveToDB();
+              }
             widget.e.images = imagens;
             widget.e.UpdateDB(tmp);
             _displaySnackbar("Equipamento atualizado.");
             Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> EquipmentDetail(tmp)));
           }
     });
+  }
+
+  _onCheckRepair(bool value) {
+    setState(() { _srchRepair = value;});
+  }
+
+  Future<void> _srchRep() async {
+    r_list = await dbHandler.instance.queryByName("v_repair", widget.e.name);
+    if(r_list != null)
+      setState(() {
+        _displaySnackbar("Resultados foram encontrados para "+widget.e.name);
+      });
+    else{
+      setState(() {
+        _displaySnackbar("Nenhum resultado encontrado para "+widget.e.name);
+      });
+    }
   }
 }

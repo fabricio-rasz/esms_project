@@ -10,19 +10,20 @@ import 'dbhandler.dart';
 
 class Repair{
   int id;
-  final String equipment, repair;
-  Repair(this.equipment,this.repair);
+  final int eq_id;
+  final repair;
+  Repair(this.eq_id,this.repair);
 
   final dbHandler dbh = dbHandler.instance;
 
   Map<String,dynamic> toJson() =>{
-    'equipment': equipment,
+    'eq_id': eq_id,
     'repair': repair
   };
 
   Repair.fromJson(Map<String, dynamic> jsona)
   :
-      equipment = jsona['equipment'],
+      eq_id = jsona['eq_id'],
       repair = jsona['repair'];
 
   int SaveToDB() {
@@ -35,9 +36,9 @@ class Repair{
     });
   }
 
-  Future<Equipment> LoadFromDB(int num) async {
+  Future<Repair> LoadFromDB(int num) async {
     dbh.queryByID("repair", num).then((List<Map<String, dynamic>> value){
-      return Equipment.fromJson(value[0]);
+      return Repair.fromJson(value[0]);
     }
     );
   }

@@ -51,8 +51,17 @@ class dbHandler{
     );
     batch.execute("CREATE TABLE IF NOT EXISTS repair("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-        "equipment TEXT NOT NULL,"
+        "eq_id INTEGER NOT NULL,"
         "repair TEXT NOT NULL);"
+    );
+    batch.execute(
+      "CREATE VIEW v_repair "
+          "AS SELECT r.id as repair_id, "
+          "eq.id as id, "
+          "eq.name as name,"
+          "r.repair as repair "
+          "FROM repair r INNER JOIN equipment eq "
+          "WHERE eq.id = r.eq_id"
     );
     batch.execute("CREATE VIEW v_equipment "
         "AS SELECT cli.id as client_id, "
