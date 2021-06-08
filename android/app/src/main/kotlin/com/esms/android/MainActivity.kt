@@ -1,4 +1,4 @@
-package com.example.esms_project
+package com.esms.android
 
 import io.flutter.embedding.android.FlutterActivity
 

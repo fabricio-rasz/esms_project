@@ -2,11 +2,10 @@ import 'package:esms_project/mainScreen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(ESMSApp());
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class ESMSApp extends StatelessWidget {
   /* TODO: Consertos realizados em outros aparelhos parecidos? -- 01/06/2021, adicionado tabela
           TODO: Fazer telas relacionadas a tabela
             Vai pegar o nome do aparelho quando colocar data de entrega se o usuário quiser

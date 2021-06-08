@@ -1,4 +1,5 @@
 import 'package:esms_project/client.dart';
+import 'package:esms_project/screens/listClients.dart';
 import 'package:esms_project/widgets/widget_button.dart';
 import 'package:esms_project/widgets/widget_input.dart';
 import 'package:flutter/material.dart';
@@ -81,6 +82,8 @@ class _CreateClientState extends State<CreateClient> {
         c.SaveToDB();
         if (c.id != null || c.id != 0) {
           _displaySnackbar("Cliente cadastrado.");
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => ListClients()));
         } else {
           _displaySnackbar("Erro no cadastro.");
         }

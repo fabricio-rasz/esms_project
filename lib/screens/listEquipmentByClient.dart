@@ -262,7 +262,6 @@ class _listEquipmentClientState extends State<listEquipmentClient> {
   void load(int arg) async {
     Equipment t = new Equipment(0, "", "", "", DateTime.now());
     t = await t.LoadFromDB(arg);
-    print(t.toJson());
   }
 
   void onPressWithArg(ctx, int id) {

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:esms_project/client.dart';
+import 'package:esms_project/screens/listClients.dart';
 import 'package:esms_project/widgets/widget_button.dart';
 import 'package:esms_project/widgets/widget_input.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class alterClient extends StatefulWidget {
 }
 
 class _alterClientState extends State<alterClient> {
+  Timer d;
   final values = new List<TextEditingController>.generate(
       4, (_) => TextEditingController());
   final _formCli = GlobalKey<FormState>();
@@ -83,6 +85,17 @@ class _alterClientState extends State<alterClient> {
                   Botoes(
                     "Atualizar cliente",
                     onPressed: _updateClient,
+                  ),
+                  Botoes(
+                    "Remover cliente",
+                    onPressed: ()
+                    {
+                      values[0].text = "CLIENTE REMOVIDO";
+                      values[1].text = "";
+                      values[2].text = "";
+                      values[3].text = "";
+                      _updateClient();
+                    },
                   )
                 ]
             )
@@ -100,13 +113,18 @@ class _alterClientState extends State<alterClient> {
           values[3].text,
         );
         widget.c.UpdateDB(temp);
-        Timer d = Timer(Duration(milliseconds: 300), () {
-          if(widget.c.status == 1)
+        int StuckCount = 0;
+        d = Timer(Duration(milliseconds: 300), () {
+          if(widget.c.status == 1) {
             _showcontent(temp);
+            StuckCount = 0;
+            d.cancel();
+          }
           else
-            _displaySnackbar("Verifique os valores");
+            StuckCount++;
         });
-
+        if(StuckCount >= 2)
+          _displaySnackbar("Verifique os valores");
       }
     });
   }
@@ -135,11 +153,13 @@ class _alterClientState extends State<alterClient> {
             ),
           ),
           actions: [
-            new FlatButton(
+            new TextButton(
               child: new Text('OK'),
               onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> ClientDetail(temp)));
+                int count = 0;
+                Navigator.of(context).popUntil((_) => count++ >= 3);
+                Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> ListClients()));
+                Navigator.of(context).push(new MaterialPageRoute(builder: (context)=> ClientDetail(temp)));
               },
             ),
           ],

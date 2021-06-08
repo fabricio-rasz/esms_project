@@ -12,11 +12,18 @@ class ListClients extends StatefulWidget {
 class _ListClientsState extends State<ListClients> {
   final dbHandler dbh = dbHandler.instance;
   Future<bool> loaded;
-  List<Map<String, dynamic>> cliList;
+  List<Map<String, dynamic>> cliList = List.empty(growable: true);
 
   Future<bool> _loadvars() async {
     dbh.queryOrdered("client", "ASC", "name").then((value) {
-      cliList = value;
+      List<Map<String,dynamic>> tmp = value;
+      for(int i = 0; i < tmp.length; i++)
+        {
+          if(tmp[i]['name'] != "CLIENTE REMOVIDO")
+            {
+              cliList.add(tmp[i]);
+            }
+        }
       setState(() {
         return true && cliList != null;
       });

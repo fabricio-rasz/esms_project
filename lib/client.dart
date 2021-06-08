@@ -5,7 +5,7 @@ class Client{
       telephone,
       cellular,
       observations;
-  int id, status;
+  int id, status, enabled;
   Client(this.name, this.telephone, this.cellular, this.observations);
 
   final dbHandler dbh = dbHandler.instance;
@@ -41,7 +41,7 @@ class Client{
   UpdateDB(int num)
   {
     dbh.update(this.toJson(), num, "client").then((value){
-      status = value;
+      status = 1;
     },onError: (object){
       status = 0;
     });

@@ -9,7 +9,7 @@
 import 'dbhandler.dart';
 
 class Repair{
-  int id;
+  int id, status;
   final int eq_id;
   final repair;
   Repair(this.eq_id,this.repair);
@@ -20,6 +20,11 @@ class Repair{
     'eq_id': eq_id,
     'repair': repair
   };
+  Repair.fromView(Map<String, dynamic> jsona)
+  :
+      id = jsona['repair_id'],
+      eq_id = jsona['id'],
+      repair = jsona['repair'];
 
   Repair.fromJson(Map<String, dynamic> jsona)
   :
@@ -30,9 +35,9 @@ class Repair{
     Future<int> t = dbh.insert(this.toJson(), "repair");
     t.then((int value) {
       this.id = value;
-      return 0;
-    }, onError: (value) {
-      return 1;
+      status = 1;
+    },onError: (object){
+      status = 0;
     });
   }
 
@@ -43,17 +48,25 @@ class Repair{
     );
   }
 
-  Future UpdateDB(int num) async {
-    return await dbh.update(this.toJson(), num, "repair");
+  UpdateDB(int num) {
+    dbh.update(this.toJson(), num, "repair").then((value){
+      status = 1;
+    },onError: (object){
+      status = 0;
+    });
   }
 
-  Future RemoveDB(int num) async {
-    return await dbh.delete(num, "repair");
+  RemoveDB(int num) {
+    dbh.delete(num, "repair").then((value){
+      status = 1;
+    }, onError: (object){
+      status = 0;
+    });
   }
 }
 
 class Equipment {
-  int id;
+  int id, status;
   final int client_id;
   final String name, problem, observation;
   final DateTime dateInput;
@@ -104,9 +117,9 @@ class Equipment {
     Future<int> t = dbh.insert(this.toJson(), "equipment");
     t.then((int value) {
       this.id = value;
-      return 0;
+      status = 1;
     }, onError: (value) {
-      return 1;
+      status = 0;
     });
   }
 
@@ -117,11 +130,19 @@ class Equipment {
     );
   }
 
-  Future UpdateDB(int num) async {
-    return await dbh.update(this.toJson(), num, "equipment");
+  UpdateDB(int num) {
+    dbh.update(this.toJson(), num, "equipment").then((value){
+      status = 1;
+    },onError: (object){
+      status = 0;
+    });
   }
 
-  Future RemoveDB(int num) async {
-    return await dbh.delete(num, "equipment");
+  RemoveDB(int num) {
+    dbh.delete(num, "equipment").then((value){
+      status = 1;
+    }, onError: (object){
+      status = 0;
+    });
   }
 }

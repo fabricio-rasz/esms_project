@@ -4,10 +4,12 @@ import 'package:esms_project/client.dart';
 import 'package:esms_project/dbhandler.dart';
 import 'package:esms_project/electronic.dart';
 import 'package:esms_project/widgets/widget_button.dart';
+import 'package:esms_project/widgets/widget_generate.dart';
 import 'package:esms_project/widgets/widget_input.dart';
 import 'package:flutter/material.dart';
-import 'package:images_picker/images_picker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 
 class CreateEquipment extends StatefulWidget {
   Client c;
@@ -41,7 +43,6 @@ class _CreateEquipmentState extends State<CreateEquipment> {
     if(c != null)
       {
         _client = true;
-        print(c.id);
         _justregistered = true;
         values[3].text = c.name;
       }
@@ -290,22 +291,24 @@ class _CreateEquipmentState extends State<CreateEquipment> {
 
   Future<void> _snapPic() async {
     if (_ValidateInputs()) {
-      final imageCarregada =
-          await ImagesPicker.openCamera(pickType: PickType.image);
-      if (imageCarregada != null) {
+      Directory dir = await getApplicationDocumentsDirectory();
+      final imagem = await ImagePicker().getImage(source: ImageSource.camera);
+
+      if (imagem != null) {
         setState(() {
-          _image = File(imageCarregada[0].thumbPath);
+          _image = File(imagem.path);
         });
-        bool resultado = await ImagesPicker.saveImageToAlbum(
-            File(imageCarregada[0].thumbPath),
-            albumName: "Fotos de Aparelhos");
+
+        final fileName = StringGenerator().getRandomString(10) + ".jpg";
+        final savedImage = await File(imagem.path).copy(
+            '${dir.path}/Pictures/$fileName');
+        if(savedImage != null) {
+          imagens.add(fileName);
+          _displaySnackbar("Foto adicionada com sucesso.");
+        }
+        }
       }
-      if (imagens.length < 2) imagens.add(_image.path);
-      _displaySnackbar("Foto adicionada com sucesso.");
-    } else {
-      _displaySnackbar("Verifique os campos.");
     }
-  }
 
   _displaySnackbar(String text) {
     setState(() {
@@ -329,9 +332,12 @@ class _CreateEquipmentState extends State<CreateEquipment> {
 
         if (e.SaveToDB() == 1) {
           _displaySnackbar("Erro no cadastro!");
-        } else
+        } else {
           _displaySnackbar("Cadastrado com sucesso.");
+          Navigator.of(context).pop();
+        }
       }
+
     });
   }
 

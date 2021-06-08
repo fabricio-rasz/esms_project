@@ -1,6 +1,12 @@
+import 'dart:async';
+
 import 'package:esms_project/dbhandler.dart';
+import 'package:esms_project/screens/equipmentDetail.dart';
 import 'package:esms_project/widgets/widget_button.dart';
 import 'package:flutter/material.dart';
+
+import '../electronic.dart';
+
 class ListRepairs extends StatefulWidget {
   @override
   _ListRepairsState createState() => _ListRepairsState();
@@ -10,7 +16,6 @@ class _ListRepairsState extends State<ListRepairs> {
   final dbHandler dbh = dbHandler.instance;
   Future<bool> loaded;
   List<Map<String, dynamic>> repList;
-
   Future<bool> _loadvars() async {
     dbh.queryOrdered("v_repair", "ASC", "name").then((value) {
       repList = value;
@@ -20,10 +25,9 @@ class _ListRepairsState extends State<ListRepairs> {
     });
     return false;
   }
-
   @override
   void setState(fn) {
-    if(mounted) {
+    if (mounted) {
       super.setState(fn);
     }
   }
@@ -37,9 +41,7 @@ class _ListRepairsState extends State<ListRepairs> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-        title: Text("Listagem de Reparos")
-    ),
+      appBar: AppBar(title: Text("Exemplares de Consertos")),
       body: _body(),
     );
   }
@@ -72,7 +74,9 @@ class _ListRepairsState extends State<ListRepairs> {
                                     overflow: TextOverflow.ellipsis,
                                     strutStyle: StrutStyle(fontSize: 18.0),
                                     text: TextSpan(
-                                        style: TextStyle(color: Colors.black, fontSize: 18.0),
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 18.0),
                                         text: "Aparelho: " +
                                             '${repList[index]['name']}')),
                               ],
@@ -83,64 +87,66 @@ class _ListRepairsState extends State<ListRepairs> {
                                     overflow: TextOverflow.ellipsis,
                                     strutStyle: StrutStyle(fontSize: 18.0),
                                     text: TextSpan(
-                                        style: TextStyle(color: Colors.black, fontSize: 18.0),
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 18.0),
                                         text: "Reparo: " +
                                             '${repList[index]['repair']}'))
                               ],
                             )
                           ],
                         ),
-                        onTap: () =>
-                            onPressWithArg(context, repList[index]['id']),
+                        onTap: () => onPressWithArg(
+                            repList[index]['repair'],repList[index]['id'],repList[index]['repair_id']),
                       ));
                 },
                 separatorBuilder: (BuildContext context, int index) =>
-                const Divider());
+                    const Divider());
           } else {
             return Container(
                 child: Center(
                     child: Column(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              RichText(
-                                strutStyle: StrutStyle(
-                                    fontSize: 32.0,
-                                    fontWeight: FontWeight.w400,
-                                    fontStyle: FontStyle.italic),
-                                text: TextSpan(
-                                    style: TextStyle(
-                                        fontSize: 32.0,
-                                        fontWeight: FontWeight.w400,
-                                        fontStyle: FontStyle.italic,
-                                        color: Colors.black26),
-                                    text: "Nenhum reparo cadastrado."),
-                              ),
-                              RichText(
-                                strutStyle: StrutStyle(
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w400,
-                                    fontStyle: FontStyle.italic),
-                                text: TextSpan(
-                                    style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.w400,
-                                        fontStyle: FontStyle.italic,
-                                        color: Colors.black26),
-                                    text: "\nTente recarregar a tela."),
-                              ),
-                              Botoes(
-                                "Recarregar",
-                                onPressed: () => _update(context),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    )));
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      RichText(
+                        strutStyle: StrutStyle(
+                            fontSize: 32.0,
+                            fontWeight: FontWeight.w400,
+                            fontStyle: FontStyle.italic),
+                        text: TextSpan(
+                            style: TextStyle(
+                                fontSize: 32.0,
+                                fontWeight: FontWeight.w400,
+                                fontStyle: FontStyle.italic,
+                                color: Colors.black26),
+                            text: "Nenhum reparo cadastrado."),
+                      ),
+                      RichText(
+                        strutStyle: StrutStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w400,
+                            fontStyle: FontStyle.italic),
+                        text: TextSpan(
+                            style: TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w400,
+                                fontStyle: FontStyle.italic,
+                                color: Colors.black26),
+                            text: "\nTente recarregar a tela."),
+                      ),
+                      Botoes(
+                        "Recarregar",
+                        onPressed: () => _update(context),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            )));
           }
         },
       ),
@@ -149,16 +155,97 @@ class _ListRepairsState extends State<ListRepairs> {
 
   _update(BuildContext context) {
     setState(() {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => ListRepairs()));
+      Navigator.of(context).popUntil((route) => route.isFirst);
+      Navigator.of(context).push(new MaterialPageRoute(builder: (context)=> ListRepairs()));
     });
   }
 
-  onPressWithArg(context, int id) {
+  onPressWithArg(String rep, int id, int repid) {
     setState(() {
-      /*Navigator.of(context)
-          .push(new MaterialPageRoute(builder: (context) => ClientDetail(id)))
-          .whenComplete(_loadvars);*/
+      _modalInput(rep, id, repid);
     });
+  }
+
+  _modalInput(String repair, int eq, int rep) {
+    return showDialog(
+        context: context,
+        builder: (_) => SimpleDialog(
+              contentPadding: EdgeInsets.all(20),
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Detalhes do Reparo"),
+                    IconButton(
+                        iconSize: 20,
+                        onPressed: () {
+                          Navigator.of(context, rootNavigator: true)
+                              .pop('dialog');
+                        },
+                        icon: Icon(Icons.close))
+                  ],
+                ),
+                Divider(color: Colors.black38),
+                RichText(
+                    strutStyle: StrutStyle(fontSize: 16.0),
+                    text: TextSpan(
+                        style: TextStyle(color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.w300),
+                        text:repair)),
+                Divider(color: Colors.transparent),
+                Botoes(
+                  "Ver Aparelho",
+                  onPressed: () {
+                    Navigator.of(context)
+                        .push(new MaterialPageRoute(builder: (context) => EquipmentDetail(eq)))
+                        .whenComplete(_loadvars);
+                  },
+                ),
+                Botoes(
+                  "Remover Reparo",
+                  onPressed: () {
+                      _confirmDelete(rep);
+                  },
+                )
+              ],
+            )
+    );
+  }
+  _confirmDelete(int id)
+  {
+    return showDialog(
+        context: context,
+        builder: (_) => SimpleDialog(
+        contentPadding: EdgeInsets.all(20),
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("Deseja remover o reparo?"),
+              IconButton(
+                  iconSize: 20,
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true)
+                        .pop('dialog');
+                  },
+                  icon: Icon(Icons.close))
+            ],
+          ),
+          Divider(color: Colors.black38),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+            Botoes("Sim", onPressed: (){
+              Repair r = new Repair(0,"temp");
+              r.RemoveDB(id);
+              setState(() {
+                _update(context);
+              });
+            },), Botoes("Não", onPressed: (){
+                Navigator.of(context, rootNavigator: true)
+                    .pop('dialog');
+              })
+          ],)
+        ]
+        )
+    );
   }
 }

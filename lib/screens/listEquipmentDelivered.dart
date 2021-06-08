@@ -173,11 +173,7 @@ class _listEquipmentDeliveredState extends State<listEquipmentDelivered> {
                                       fontStyle: FontStyle.italic,
                                       color: Colors.black26),
                                   text:
-                                      "Cadastre um aparelho clicando no botão "),
-                            ),
-                            Icon(
-                              Icons.add_box_outlined,
-                              color: Colors.black26,
+                                      "Nenhum aparelho entregue até o momento."),
                             ),
                           ]),
                       RichText(
@@ -191,7 +187,7 @@ class _listEquipmentDeliveredState extends State<listEquipmentDelivered> {
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.italic,
                                 color: Colors.black26),
-                            text: "\nOu tente recarregar a tela."),
+                            text: "\nTente recarregar a tela."),
                       ),
                       Botoes(
                         "Recarregar",
@@ -219,7 +215,6 @@ class _listEquipmentDeliveredState extends State<listEquipmentDelivered> {
   void load(int arg) async {
     Equipment t = new Equipment(0, "", "", "", DateTime.now());
     t = await t.LoadFromDB(arg);
-    print(t.toJson());
   }
 
   void onPressWithArg(ctx, int id) {
