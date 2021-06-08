@@ -49,7 +49,7 @@ class _mainScreenState extends State<mainScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              GestureDetector(
+              InkWell(
                 child: SizedBox(
                     child: Column(
                   children: [
@@ -75,7 +75,9 @@ class _mainScreenState extends State<mainScreen> {
                     if (superCoolSecret < 4) superCoolSecret++;
                   });
                 },
-                onLongPressUp: () {
+                highlightColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                onLongPress: () {
                   setState(() {
                     if (superCoolSecret >= 4) _goto(context, AboutScr());
                   });

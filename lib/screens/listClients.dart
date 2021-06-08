@@ -19,7 +19,7 @@ class _ListClientsState extends State<ListClients> {
       List<Map<String,dynamic>> tmp = value;
       for(int i = 0; i < tmp.length; i++)
         {
-          if(tmp[i]['name'] != "CLIENTE REMOVIDO")
+          if(tmp[i]['name'] != "CLIENTE_REMOVIDO")
             {
               cliList.add(tmp[i]);
             }
@@ -85,7 +85,7 @@ class _ListClientsState extends State<ListClients> {
                       padding: const EdgeInsets.only(left: 10),
                       height: 90,
                       color: Colors.black12,
-                      child: GestureDetector(
+                      child: InkWell(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [

@@ -69,7 +69,7 @@ class _listEquipmentIDState extends State<listEquipmentID> {
                       padding: const EdgeInsets.only(left: 10),
                       height: 90,
                       color: Colors.black12,
-                      child: GestureDetector(
+                      child: InkWell(
                           child: Center(
                             child: Column(
                                 mainAxisAlignment:

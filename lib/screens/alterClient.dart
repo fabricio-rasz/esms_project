@@ -33,7 +33,7 @@ class _alterClientState extends State<alterClient> {
 
   @override
   void setState(fn) {
-    if(mounted) {
+    if (mounted) {
       super.setState(fn);
     }
   }
@@ -46,6 +46,7 @@ class _alterClientState extends State<alterClient> {
         ),
         body: _layout());
   }
+
   _layout() {
     return Container(
         padding: EdgeInsets.all(20),
@@ -88,13 +89,8 @@ class _alterClientState extends State<alterClient> {
                   ),
                   Botoes(
                     "Remover cliente",
-                    onPressed: ()
-                    {
-                      values[0].text = "CLIENTE REMOVIDO";
-                      values[1].text = "";
-                      values[2].text = "";
-                      values[3].text = "";
-                      _updateClient();
+                    onPressed: () {
+                      _removeClient();
                     },
                   )
                 ]
@@ -115,7 +111,7 @@ class _alterClientState extends State<alterClient> {
         widget.c.UpdateDB(temp);
         int StuckCount = 0;
         d = Timer(Duration(milliseconds: 300), () {
-          if(widget.c.status == 1) {
+          if (widget.c.status == 1) {
             _showcontent(temp);
             StuckCount = 0;
             d.cancel();
@@ -123,7 +119,7 @@ class _alterClientState extends State<alterClient> {
           else
             StuckCount++;
         });
-        if(StuckCount >= 2)
+        if (StuckCount >= 2)
           _displaySnackbar("Verifique os valores");
       }
     });
@@ -139,33 +135,81 @@ class _alterClientState extends State<alterClient> {
 
   void _showcontent(temp) {
     setState(() {
-    showDialog(
-      context: context, barrierDismissible: false, // user must tap button!
+      showDialog(
+        context: context, barrierDismissible: false, // user must tap button!
 
-      builder: (BuildContext context) {
-        return new AlertDialog(
-          title: new Text('Aviso'),
-          content: new SingleChildScrollView(
-            child: new ListBody(
-              children: [
-                new Text('Cliente atualizado.'),
-              ],
+        builder: (BuildContext context) {
+          return new AlertDialog(
+            title: new Text('Aviso'),
+            content: new SingleChildScrollView(
+              child: new ListBody(
+                children: [
+                  new Text('Cliente atualizado.'),
+                ],
+              ),
             ),
-          ),
-          actions: [
-            new TextButton(
-              child: new Text('OK'),
-              onPressed: () {
-                int count = 0;
-                Navigator.of(context).popUntil((_) => count++ >= 3);
-                Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> ListClients()));
-                Navigator.of(context).push(new MaterialPageRoute(builder: (context)=> ClientDetail(temp)));
-              },
+            actions: [
+              new TextButton(
+                child: new Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                  if(values[0].text == "CLIENTE_REMOVIDO")
+                    Navigator.of(context).push(new MaterialPageRoute(
+                        builder: (context) => ListClients()));
+                  else {
+                    Navigator.of(context).push(new MaterialPageRoute(
+                        builder: (context) => ListClients()));
+                    Navigator.of(context).push(new MaterialPageRoute(
+                        builder: (context) => ClientDetail(temp)));
+                  }
+
+                },
+              ),
+            ],
+          );
+        },
+      );
+    });
+  }
+
+  _removeClient() {
+    setState(() {
+      showDialog(
+        context: context, barrierDismissible: false, // user must tap button!
+
+        builder: (BuildContext context) {
+          return new AlertDialog(
+            title: new Text('Confirmação'),
+            content: new SingleChildScrollView(
+              child: new ListBody(
+                children: [
+                  new Text('Tem certeza que quer remover o cliente ${widget.c
+                      .name}?'),
+                ],
+              ),
             ),
-          ],
-        );
-      },
-    );
+            actions: [
+              new TextButton(
+                child: new Text('Sim'),
+                onPressed: () {
+                  values[0].text = "CLIENTE_REMOVIDO";
+                  values[1].text = "";
+                  values[2].text = "";
+                  values[3].text = "";
+                  _updateClient();
+
+                },
+              ),
+              new TextButton(
+                child: new Text('Não'),
+                onPressed: () {
+
+                },
+              ),
+            ],
+          );
+        },
+      );
     });
   }
 }

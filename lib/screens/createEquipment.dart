@@ -177,10 +177,17 @@ class _CreateEquipmentState extends State<CreateEquipment> {
   Future<void> _GetClient() async {
     if (values[3] != null && values[3].text.isNotEmpty) {
       clients = await dbHandler.instance.queryByName("client", values[3].text);
-      if (clients != null)
-        setState(() {
-          FocusScope.of(context).unfocus();
-        });
+      List<Map<String,dynamic>> temp = List.empty(growable: true);
+      setState(() {
+        if (clients != null) {
+          for (int i = 0; i < clients.length; i++) {
+            if (clients[i]['name'] != 'CLIENTE_REMOVIDO')
+              temp.add(clients[i]);
+          }
+          clients = temp;
+        }
+        FocusScope.of(context).unfocus();
+      });
     }
   }
 

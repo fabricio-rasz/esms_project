@@ -64,7 +64,7 @@ class _ListRepairsState extends State<ListRepairs> {
                       padding: const EdgeInsets.only(left: 10),
                       height: 90,
                       color: Colors.black12,
-                      child: GestureDetector(
+                      child: InkWell(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [

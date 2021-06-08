@@ -1,6 +1,7 @@
 import 'package:esms_project/dbhandler.dart';
 import 'package:esms_project/screens/createEquipment.dart';
 import 'package:esms_project/screens/equipmentDetail.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:esms_project/electronic.dart';
 import 'package:esms_project/widgets/widget_button.dart';
@@ -72,11 +73,12 @@ class _listEquipmentState extends State<listEquipment> {
                       padding: const EdgeInsets.only(left: 10),
                       height: 90,
                       color: Colors.black12,
-                      child: GestureDetector(
+                      child: InkWell(
                           child: Center(
                             child: Column(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
+                                mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Row(
                                     children: [
