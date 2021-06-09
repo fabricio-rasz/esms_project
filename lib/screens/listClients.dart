@@ -15,6 +15,7 @@ class _ListClientsState extends State<ListClients> {
   List<Map<String, dynamic>> cliList = List.empty(growable: true);
 
   Future<bool> _loadvars() async {
+    cliList = List.empty(growable: true);
     dbh.queryOrdered("client", "ASC", "name").then((value) {
       List<Map<String,dynamic>> tmp = value;
       for(int i = 0; i < tmp.length; i++)
