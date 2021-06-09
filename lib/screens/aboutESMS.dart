@@ -79,7 +79,7 @@ class _AboutScrState extends State<AboutScr> {
                                     color: Colors.redAccent[700],
                                     fontSize: 12,
                                 letterSpacing: 10),
-                                text: "RELEASE CANDIDATE 2",),
+                                text: "RELEASE CANDIDATE 3",),
                           ),
                           RichText(
                             text: TextSpan(

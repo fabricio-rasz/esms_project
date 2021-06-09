@@ -105,6 +105,21 @@ class dbHandler{
     return await db.query("v_equipment", orderBy: 'equipment ASC', where: 'isDelivered = 1');
   }
 
+  Future<List<Map<String,dynamic>>> queryRepair(String name) async{
+    Database db = await instance.database;
+    return await db.query("v_repair", where: 'name LIKE ?', whereArgs: ['%$name%'], orderBy: 'name ASC');
+  }
+
+  Future<List<Map<String,dynamic>>> queryEquipment(String equipment) async{
+    Database db = await instance.database;
+    return await db.query("v_equipment", where: 'equipment LIKE ?', whereArgs: ['%$equipment%'], orderBy: 'equipment ASC');
+  }
+
+  Future<List<Map<String,dynamic>>> queryClient(String name) async{
+    Database db = await instance.database;
+    return await db.query("client", where: 'name LIKE ?', whereArgs: ['%$name%'], orderBy: 'name ASC');
+  }
+
   Future<List<Map<String,dynamic>>> queryEquipmentClient(int client_id) async{
     Database db = await instance.database;
     return await db.query("v_equipment", where: 'client_id = ?', whereArgs: [client_id]);

@@ -45,7 +45,7 @@ class _listEquipmentIDState extends State<listEquipmentID> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Pesquisa por Número"),
+        title: Text("Resultados da Pesquisa"),
       ),
       body: _body(),
     );

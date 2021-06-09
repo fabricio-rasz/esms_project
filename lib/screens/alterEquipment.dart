@@ -86,7 +86,7 @@ class _alterEquipmentState extends State<alterEquipment> {
                   children: [
                     InputValidado(
                       "Nome do Aparelho",
-                      "Ex.: Radio Pioneer",
+                      "Ex.: Radio XYZ",
                       controller: values[0],
                     ),
                     InputValidado(

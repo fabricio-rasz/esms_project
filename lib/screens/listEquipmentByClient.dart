@@ -74,7 +74,7 @@ class _listEquipmentClientState extends State<listEquipmentClient> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Aparelhos para Conserto"),
+        title: Text("Resultados da Pesquisa"),
         actions: <Widget>[
           if(c != null)
           IconButton(

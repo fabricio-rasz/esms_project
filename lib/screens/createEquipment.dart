@@ -82,7 +82,7 @@ class _CreateEquipmentState extends State<CreateEquipment> {
                     children: [
                       InputValidado(
                         "Nome do Aparelho",
-                        "Ex.: Radio Pioneer",
+                        "Ex.: Radio XYZ",
                         controller: values[0],
                       ),
                       InputValidado(

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:esms_project/dbhandler.dart';
 import 'package:esms_project/screens/equipmentDetail.dart';
 import 'package:esms_project/widgets/widget_button.dart';
+import 'package:esms_project/widgets/widget_input.dart';
 import 'package:flutter/material.dart';
 
 import '../electronic.dart';
@@ -15,6 +16,7 @@ class ListRepairs extends StatefulWidget {
 class _ListRepairsState extends State<ListRepairs> {
   final dbHandler dbh = dbHandler.instance;
   Future<bool> loaded;
+
   List<Map<String, dynamic>> repList;
   Future<bool> _loadvars() async {
     dbh.queryOrdered("v_repair", "ASC", "name").then((value) {
@@ -41,7 +43,14 @@ class _ListRepairsState extends State<ListRepairs> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Exemplares de Consertos")),
+      appBar: AppBar(
+          title: Text("Exemplares de Consertos"),
+        actions: [
+            IconButton(onPressed: (){
+              showSearch(context: context, delegate: CustomSearch(type: 0, loadList: repList));
+            }, icon: Icon(Icons.search))
+        ],
+      ),
       body: _body(),
     );
   }
