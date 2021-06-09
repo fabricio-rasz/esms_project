@@ -302,7 +302,7 @@ class _alterEquipmentState extends State<alterEquipment> {
             content: new SingleChildScrollView(
               child: new ListBody(
                 children: [
-                  new Text('Deseja remover informações sobre reparo?.'),
+                  new Text('Deseja remover informações sobre reparo?'),
                 ],
               ),
             ),
