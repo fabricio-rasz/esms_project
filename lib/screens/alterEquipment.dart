@@ -160,10 +160,11 @@ class _alterEquipmentState extends State<alterEquipment> {
               "Atualizar Aparelho",
               onPressed: _update,
             ),
-            Botoes(
-              "Tire uma foto!",
-              onPressed: _snapPic,
-            ),
+            if (imagens != null && imagens.length <= 10)
+              Botoes(
+                "Tire uma foto!",
+                onPressed: _snapPic,
+              ),
             if (imagens[0].isNotEmpty)
               Text("Você tirou " + imagens.length.toString() + " fotos."),
           ],

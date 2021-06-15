@@ -101,14 +101,14 @@ class CustomSearch extends SearchDelegate{
       {
         case 0:
           {
-            if(loadList[i]['name'].contains(query)){
+            if(loadList[i]['name'].toUpperCase().contains(query.toUpperCase())){
               searchList.add(loadList[i]);
             }
             break;
           }
         case 1:
           {
-            if(loadList[i]['equipment'].contains(query)){
+            if(loadList[i]['equipment'].toUpperCase().contains(query.toUpperCase())){
               searchList.add(loadList[i]);
             }
             break;

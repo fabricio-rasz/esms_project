@@ -155,10 +155,11 @@ class _CreateEquipmentState extends State<CreateEquipment> {
                       "Cadastrar Aparelho",
                       onPressed: _addEquipment,
                     ),
-                    Botoes(
-                      "Tire uma foto!",
-                      onPressed: _snapPic,
-                    ),
+                    if (imagens != null && imagens.length <= 10)
+                      Botoes(
+                        "Tire uma foto!",
+                        onPressed: _snapPic,
+                      ),
                   ],
                 ),
               if (imagens != null && imagens.length > 0)
