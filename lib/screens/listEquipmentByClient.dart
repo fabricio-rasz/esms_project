@@ -26,12 +26,12 @@ class _listEquipmentClientState extends State<listEquipmentClient> {
   Timer stuck;
   Future<bool> _loadvars() async {
     if(widget.id_client!=null) {
+      dbh.queryByID("client", widget.id_client).then((value) {
+        c = Client.fromJson(value[0]);
+      });
       widget.clientName = null;
       dbh.queryEquipmentClient(widget.id_client).then((value) {
         eqList = value;
-      });
-      dbh.queryByID("client", widget.id_client).then((value) {
-        c = Client.fromJson(value[0]);
       });
     }
     if(widget.clientName != null)
@@ -76,7 +76,7 @@ class _listEquipmentClientState extends State<listEquipmentClient> {
       appBar: AppBar(
         title: Text("Resultados da Pesquisa"),
         actions: <Widget>[
-          if(c != null)
+          if(widget.id_client != null)
           IconButton(
               onPressed: () => _addItem(context),
               icon: Icon(Icons.add_box_outlined))
