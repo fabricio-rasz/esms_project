@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:esms_project/client.dart';
 import 'package:esms_project/dbhandler.dart';
 import 'package:esms_project/electronic.dart';
+import 'package:esms_project/mainScreen.dart';
 import 'package:esms_project/widgets/widget_button.dart';
 import 'package:esms_project/widgets/widget_generate.dart';
 import 'package:esms_project/widgets/widget_input.dart';
@@ -342,10 +343,9 @@ class _CreateEquipmentState extends State<CreateEquipment> {
           _displaySnackbar("Erro no cadastro!");
         } else {
           _displaySnackbar("Cadastrado com sucesso.");
-          Navigator.of(context).pop();
+          Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context) => mainScreen()));
         }
       }
-
     });
   }
 

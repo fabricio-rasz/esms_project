@@ -26,51 +26,53 @@ class _listEquipmentMainState extends State<listEquipmentMain> {
     return Container(
         padding: EdgeInsets.all(20),
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              RichText(
-                  text: TextSpan(
-                      style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          color: Colors.black,
-                          fontSize: 30),
-                      text: "Listagem de Aparelhos")),
-              RichText(
-                  text: TextSpan(
-                      style: TextStyle(
-                          fontWeight: FontWeight.w300,
-                          color: Colors.black,
-                          fontSize: 20),
-                      text: "Selecione uma das opções abaixo.")),
-              Divider(color: Colors.black38,),
-              FractionallySizedBox(
-                widthFactor: 0.7,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    BotaoCustom(
-                      "Por Cliente",
-                      onPressed: () => _modalInput("Digite um nome.",
-                          "Ex. José da Silva"),
-                    ),
-                    BotaoCustom(
-                      "Por Número",
-                      onPressed: () => _modalInputID("Digite um número.",
-                          "Ex. 1123"),
-                    ),
-                    BotaoCustom(
-                      "Aparelhos Entregues",
-                      onPressed: () => _goto(context, listEquipmentDelivered()),
-                    ),
-                    BotaoCustom("Aparelhos em Aberto",
-                        onPressed: () => _goto(context, listEquipment()))
-                  ],
-                ),
-              )
-            ],
-          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                RichText(
+                    text: TextSpan(
+                        style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black,
+                            fontSize: 30),
+                        text: "Listagem de Aparelhos")),
+                RichText(
+                    text: TextSpan(
+                        style: TextStyle(
+                            fontWeight: FontWeight.w300,
+                            color: Colors.black,
+                            fontSize: 20),
+                        text: "Selecione uma das opções abaixo.")),
+                Divider(color: Colors.black38,),
+                FractionallySizedBox(
+                  widthFactor: 0.7,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      BotaoCustom(
+                        "Por Cliente",
+                        onPressed: () => _modalInput("Digite um nome.",
+                            "Ex. José da Silva"),
+                      ),
+                      BotaoCustom(
+                        "Por Número",
+                        onPressed: () => _modalInputID("Digite um número.",
+                            "Ex. 1123"),
+                      ),
+                      BotaoCustom(
+                        "Aparelhos Entregues",
+                        onPressed: () => _goto(context, listEquipmentDelivered()),
+                      ),
+                      BotaoCustom("Aparelhos em Aberto",
+                          onPressed: () => _goto(context, listEquipment()))
+                    ],
+                  ),
+                )
+              ],
+            ),
+          )
         ));
   }
 

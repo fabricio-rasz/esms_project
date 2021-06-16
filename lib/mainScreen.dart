@@ -46,69 +46,71 @@ class _mainScreenState extends State<mainScreen> {
     return Container(
         padding: EdgeInsets.all(20),
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              InkWell(
-                child: SizedBox(
-                    child: Column(
-                  children: [
-                    RichText(
-                        text: TextSpan(
-                            style: TextStyle(
-                                fontWeight: FontWeight.w100,
-                                color: Colors.black,
-                                fontSize: 100),
-                            text: "ESMS")),
-                    RichText(
-                      text: TextSpan(
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black,
-                              fontSize: 12),
-                          text: "Eletronics Servicing Management System"),
-                    )
-                  ],
-                )),
-                onTap: () {
-                  setState(() {
-                    if (superCoolSecret < 4) superCoolSecret++;
-                  });
-                },
-                highlightColor: Colors.transparent,
-                splashColor: Colors.transparent,
-                onLongPress: () {
-                  setState(() {
-                    if (superCoolSecret >= 4) _goto(context, AboutScr());
-                  });
-                },
-              ),
-              Divider(
-                color: Colors.black38,
-              ),
-              FractionallySizedBox(
-                widthFactor: 0.7,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    BotaoCustom(
-                      "Cadastrar Cliente",
-                      onPressed: () => _goto(context, CreateClient()),
-                    ),
-                    BotaoCustom("Cadastrar Aparelho",
-                        onPressed: () => _goto(context, CreateEquipment())),
-                    BotaoCustom("Ver Aparelhos",
-                        onPressed: () => _goto(context, listEquipmentMain())),
-                    BotaoCustom("Ver Clientes",
-                        onPressed: () => _goto(context, ListClients())),
-                    BotaoCustom("Ver Reparos",
-                        onPressed: () => _goto(context, ListRepairs())),
-                  ],
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                InkWell(
+                  child: SizedBox(
+                      child: Column(
+                        children: [
+                          RichText(
+                              text: TextSpan(
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w100,
+                                      color: Colors.black,
+                                      fontSize: 100),
+                                  text: "ESMS")),
+                          RichText(
+                            text: TextSpan(
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.black,
+                                    fontSize: 12),
+                                text: "Eletronics Servicing Management System"),
+                          )
+                        ],
+                      )),
+                  onTap: () {
+                    setState(() {
+                      if (superCoolSecret < 4) superCoolSecret++;
+                    });
+                  },
+                  highlightColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                  onLongPress: () {
+                    setState(() {
+                      if (superCoolSecret >= 4) _goto(context, AboutScr());
+                    });
+                  },
                 ),
-              ),
-            ],
-          ),
+                Divider(
+                  color: Colors.black38,
+                ),
+                FractionallySizedBox(
+                  widthFactor: 0.7,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      BotaoCustom(
+                        "Cadastrar Cliente",
+                        onPressed: () => _goto(context, CreateClient()),
+                      ),
+                      BotaoCustom("Cadastrar Aparelho",
+                          onPressed: () => _goto(context, CreateEquipment())),
+                      BotaoCustom("Ver Aparelhos",
+                          onPressed: () => _goto(context, listEquipmentMain())),
+                      BotaoCustom("Ver Clientes",
+                          onPressed: () => _goto(context, ListClients())),
+                      BotaoCustom("Ver Reparos",
+                          onPressed: () => _goto(context, ListRepairs())),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          )
         ));
   }
 
